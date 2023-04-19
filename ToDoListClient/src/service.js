@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-axios.defaults.baseURL="http://localhost:5248/todoitems";
+axios.defaults.baseURL=process.env.REACT_APP_API_URL;
 const apiClient = axios.create({
-  baseURL: "http://localhost:5248/todoitems",
+  baseURL: process.env.REACT_APP_API_URL,
 });
 
 apiClient.interceptors.response.use(
@@ -13,7 +13,7 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 )
-// const apiUrl = "http://localhost:5248"
+// const apiUrl = process.env.REACT_APP_API_URL
 
 export default {
   getTasks: async () => {
