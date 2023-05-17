@@ -2,18 +2,18 @@ import axios from 'axios';
 
 axios.defaults.baseURL=process.env.REACT_APP_API;
 
-// const apiClient = axios.create({
-//   baseURL: process.env.REACT_APP_API,
-// });
+const apiClient = axios.create({
+  baseURL: process.env.REACT_APP_API,
+});
 
-// apiClient.interceptors.response.use(
-//   response => response,
-//   error => {
+apiClient.interceptors.response.use(
+  response => response,
+  error => {
     
-//     console.error(error);
-//     return Promise.reject(error);
-//   }
-// )
+    console.error(error);
+    return Promise.reject(error);
+  }
+)
 // const apiUrl = process.env.REACT_APP_API
 
 export default {
