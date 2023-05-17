@@ -1,19 +1,20 @@
 import axios from 'axios';
 
-axios.defaults.baseURL=process.env.REACT_APP_API_URL;
-const apiClient = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-});
+axios.defaults.baseURL=process.env.REACT_APP_API;
 
-apiClient.interceptors.response.use(
-  response => response,
-  error => {
+// const apiClient = axios.create({
+//   baseURL: process.env.REACT_APP_API,
+// });
+
+// apiClient.interceptors.response.use(
+//   response => response,
+//   error => {
     
-    console.error(error);
-    return Promise.reject(error);
-  }
-)
-// const apiUrl = process.env.REACT_APP_API_URL
+//     console.error(error);
+//     return Promise.reject(error);
+//   }
+// )
+// const apiUrl = process.env.REACT_APP_API
 
 export default {
   getTasks: async () => {
