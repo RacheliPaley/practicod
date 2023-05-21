@@ -1,7 +1,10 @@
-
 import axios from 'axios';
+const apiUrl =process.env.REACT_APP_API;
+const apiClient=axios.create({
+  baseURL:process.env.REACT_APP_API,
+});
+axios.defaults.baseURL=apiUrl;
 
-axios.defaults.baseURL = "https://authserver-r3gu.onrender.com/todoitems";
 
 export default {
   getTasks: async () => {
