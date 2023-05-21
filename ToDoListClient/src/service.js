@@ -1,44 +1,31 @@
+
 import axios from 'axios';
 
-axios.defaults.baseURL=process.env.REACT_APP_API;
-
-const apiClient = axios.create({
-  baseURL: process.env.REACT_APP_API,
-});
-
-apiClient.interceptors.response.use(
-  response => response,
-  error => {
-    
-    console.error(error);
-    return Promise.reject(error);
-  }
-)
-// const apiUrl = process.env.REACT_APP_API
+axios.defaults.baseURL = "https://authserver-r3gu.onrender.com/todoitems";
 
 export default {
   getTasks: async () => {
-    const result = await axios.get()  
-    
-     
-    return result.data;
+    console.log('get task')
+    const result = await axios.get()
+    console.log(result)
+    return   result.data;
   },
 
-  addTask: async(name)=>{
+  addTask: async (name) => {
     console.log('addTask', name)
-    const result = await axios.post(``, {name:name,isComplete:false }) 
+    const result = await axios.post(``, { Name: name, IsComplete: false })
     return result.data;
   },
 
- 
-  setCompleted: async(id, IsComplete)=>{
-    console.log('setCompleted', {id, IsComplete})
-    const result = await axios.put(`/${id}`,{IsComplete:IsComplete}) 
+  setCompleted: async (id, isComplete) => {
+    console.log('setCompleted', { id, isComplete })
+    const result = await axios.put(`${id}`, { isComplete: isComplete })
     return result.data;
   },
 
-  deleteTask:async(id)=>{
-    const result = await axios.delete(`/${id}`) 
-    return result.data
+  deleteTask: async (id) => {
+    console.log('deleteTask')
+    const result = await axios.delete(`/${id}`)
+    return result.data;
   }
 };
