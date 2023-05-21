@@ -3,88 +3,42 @@ using ToDoAPI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-// var builder = WebApplication.CreateBuilder(args);
-
-// builder.Services.AddEndpointsApiExplorer();
-
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy("OpenPolicy",
-//                           policy =>
-//                           {
-//                               policy.WithOrigins("https://authclient-o1zx.onrender.com/")
-//                                                   .AllowAnyHeader()
-//                                                   .AllowAnyMethod();
-//                           });
-// });
-// builder.Services.AddSwaggerGen(c =>
-// {
-//     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo API", Description = "Keep track of your tasks", Version = "v1" });
-// });
-
-// builder.Services.AddDbContext<ToDoDbContext>();
-
-//    builder.Services.AddCors(options =>
-//     {
-//         options.AddPolicy("AllowRenderClient",
-//             builder =>
-//             {
-//                 builder.WithOrigins("https://authclient-o1zx.onrender.com")
-//                     .AllowAnyHeader()
-//                     .AllowAnyMethod();
-//             });
-//     });
-
-//     // Other services here
-
-// var app = builder.Build();
-// app.UseCors("AllowRenderClient");
-// app.UseCors("OpenPolicy");
-// if (app.Environment.IsDevelopment())
-// {
-//     app.UseSwagger();
-//     app.UseSwaggerUI();
-// }
-
-// app.UseSwagger(options => { options.SerializeAsV2 = true; });
-// app.UseSwaggerUI(c =>
-// {
-//     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo API V1");
-//     c.RoutePrefix = string.Empty;
-// });
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<ToDoDbContext>();
+
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy",
-        builder => builder.AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader());
+    options.AddPolicy("OpenPolicy",
+                          policy =>
+                          {
+                              policy.WithOrigins("http://localhost:3000")
+                                                  .AllowAnyHeader()
+                                                  .AllowAnyMethod();
+                          });
 });
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo API", Description = "Keep track of your tasks", Version = "v1" });
+});
 
+builder.Services.AddDbContext<ToDoDbContext>();
 var app = builder.Build();
-Console.WriteLine();
 
-app.UseCors("CorsPolicy");
-
+app.UseCors("OpenPolicy");
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseSwagger(options =>
+app.UseSwagger(options => { options.SerializeAsV2 = true; });
+app.UseSwaggerUI(c =>
 {
-    options.SerializeAsV2 = true;
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo API V1");
+    c.RoutePrefix = string.Empty;
 });
 
-app.UseSwaggerUI(options =>
-{
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-    options.RoutePrefix = string.Empty;
-});
 // app.MapGet("/", () => "Hello World!");
 
 app.MapGet("/todoitems", async (ToDoDbContext db) =>
