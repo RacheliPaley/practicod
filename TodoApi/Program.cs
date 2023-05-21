@@ -23,8 +23,22 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddDbContext<ToDoDbContext>();
-var app = builder.Build();
 
+   builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowRenderClient",
+            builder =>
+            {
+                builder.WithOrigins("https://authclient-o1zx.onrender.com")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+    });
+
+    // Other services here
+
+var app = builder.Build();
+app.UseCors("AllowRenderClient");
 app.UseCors("OpenPolicy");
 if (app.Environment.IsDevelopment())
 {
