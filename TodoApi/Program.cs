@@ -3,44 +3,48 @@ using ToDoAPI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
+ var policyName = "_myAllowSpecificOrigins";
 
+var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
+
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("OpenPolicy",
-                          policy =>
-                          {
-                              policy.WithOrigins("http://localhost:3000")
-                                                  .AllowAnyHeader()
-                                                  .AllowAnyMethod();
-                          });
+    options.AddPolicy(name: policyName,
+                      builder =>
+                      {
+                          builder
+                            .WithOrigins("*")
+                            .AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                      });
 });
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo API", Description = "Keep track of your tasks", Version = "v1" });
-});
-
+// builder.Services.AddDbContext<ToDoDbContext>();
 builder.Services.AddDbContext<ToDoDbContext>();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "ToDo API",
+        Description = "An ASP.NET Core Web API for managing ToDo items",
+    });
+});
 var app = builder.Build();
 
-app.UseCors("OpenPolicy");
-if (app.Environment.IsDevelopment())
+app.UseCors(policyName);
+// if (app.Environment.IsDevelopment())
+// {
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseSwagger(options => { options.SerializeAsV2 = true; });
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo API V1");
-    c.RoutePrefix = string.Empty;
+options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+options.RoutePrefix = string.Empty;
 });
-
-// app.MapGet("/", () => "Hello World!");
-
+// }
 app.MapGet("/todoitems", async (ToDoDbContext db) =>
 
  await db.Items.ToListAsync());
